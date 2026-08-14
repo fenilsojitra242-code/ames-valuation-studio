@@ -600,12 +600,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const finishBonus = selectedFinish === 'charcoal' || selectedFinish === 'concrete' ? 6500 : 0;
         const estPrice = Math.round((qual ** 2.3 * 1650) + (grLiv * 62.5) + finishBonus + 45000);
         if (document.getElementById('heroPriceVal')) document.getElementById('heroPriceVal').innerText = `$${estPrice.toLocaleString()}`;
-        if (document.getElementById('calloutLiving')) document.getElementById('calloutLiving').innerText = `LIVING / ${grLiv.toLocaleString()} SQ FT`;
-
-        // Update Floating Data Typography
-        if (document.getElementById('fQual')) document.getElementById('fQual').innerText = `${qual < 10 ? '0' + qual : qual} / 10`;
-        if (document.getElementById('fArea')) document.getElementById('fArea').innerText = `${grLiv.toLocaleString()} SQ FT`;
-        if (document.getElementById('fYear')) document.getElementById('fYear').innerText = `${year}`;
         if (document.getElementById('displayYear')) document.getElementById('displayYear').innerText = `${year}`;
     }
 

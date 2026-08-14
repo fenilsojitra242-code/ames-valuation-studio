@@ -392,53 +392,6 @@ body {
 .price-val-hero { font-family: var(--font-sans); font-size: clamp(0.95rem, 2.5vw, 1.25rem); font-weight: 800; line-height: 1; }
 .price-sub-hero { font-family: var(--font-mono); font-size: clamp(0.5rem, 1.5vw, 0.62rem); font-weight: 700; letter-spacing: 0.1em; }
 
-/* Architectural Hover Callouts */
-.architectural-hover-callout {
-    position: absolute;
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: var(--carbon-black);
-    background: var(--pure-white);
-    border: 1px solid var(--cool-gray);
-    padding: 0.3rem 0.65rem;
-    display: flex;
-    align-items: center;
-    gap: 0.45rem;
-    z-index: 20;
-    pointer-events: none;
-}
-
-.callout-dot-red { width: 6px; height: 6px; border-radius: 50%; background: var(--signal-red); }
-
-.tag-garage { top: 18%; left: 5%; }
-.tag-living { bottom: 18%; left: 6%; }
-.tag-second { top: 22%; right: 26%; }
-
-/* Floating Editorial Data Typography */
-.floating-editorial-data {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-}
-
-.f-data-node {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-}
-
-.f-num { color: var(--signal-red); font-weight: 700; font-size: 0.68rem; }
-.f-label { color: var(--text-muted); font-size: 0.65rem; letter-spacing: 0.08em; }
-.f-value { color: var(--carbon-black); font-size: 0.9rem; font-weight: 700; font-family: var(--font-sans); }
-
-.node-1 { top: 8%; left: 38%; }
-.node-2 { top: 48%; right: 2%; }
-.node-3 { bottom: 8%; left: 40%; }
-.node-4 { top: 50%; left: 2%; }
-
 /* Ice Blue Valuation Section */
 .ice-blue-valuation-section {
     padding: clamp(3.5rem, 6vw, 6rem) 1.25rem;
