@@ -16,9 +16,6 @@
     <!-- Three.js for 3D Architectural WebGL Model -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    
-    <!-- html2pdf.js for Direct 1-Click PDF Download -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -368,13 +365,6 @@
                 </div>
             </div>
 
-            <!-- Result Feature Action Button: Export PDF -->
-            <div class="result-actions-strip">
-                <button type="button" id="btnExportPDF" class="btn-result-action btn-solid-red">
-                    EXPORT APPRAISAL PDF 🖨️
-                </button>
-            </div>
-
             <!-- Horizontal Editorial Strip -->
             <div class="horizontal-editorial-strip">
                 <div class="strip-item"><strong id="stSF">1,850</strong><span>SQ FT</span></div>
@@ -584,40 +574,6 @@
             <a href="#valuation" class="btn-swiss-action btn-xl">START A NEW VALUATION →</a>
         </div>
     </section>
-
-    <!-- Printable Official Appraisal Certificate Sheet (Shown only during PDF print) -->
-    <div id="printAppraisalContainer" class="print-only-sheet">
-        <div class="print-header">
-            <div class="print-logo-row">
-                <h2>AMES VALUATION STUDIO</h2>
-                <span>OFFICIAL PROPERTY APPRAISAL CERTIFICATE</span>
-            </div>
-            <p class="print-timestamp" id="printTimestamp">Generated on: August 14, 2026</p>
-        </div>
-
-        <div class="print-price-box">
-            <span class="p-sub">ESTIMATED VALUATION</span>
-            <h1 class="p-price" id="printPriceVal">$248,500</h1>
-            <p class="p-range" id="printRangeVal">Estimated Market Range: $232,000 – $265,000</p>
-        </div>
-
-        <div class="print-specs-grid">
-            <div><strong>Living Area:</strong> <span id="prSF">1,850 SQ FT</span></div>
-            <div><strong>Overall Quality:</strong> <span id="prQual">07 / 10</span></div>
-            <div><strong>Bedrooms:</strong> <span id="prBed">3</span></div>
-            <div><strong>Bathrooms:</strong> <span id="prBath">2.0</span></div>
-            <div><strong>Year Built:</strong> <span id="prYear">2005</span></div>
-            <div><strong>Neighborhood:</strong> <span id="prNeigh">College Creek (CollgCr)</span></div>
-            <div><strong>Garage:</strong> <span id="prGarage">2 Cars (500 SQ FT)</span></div>
-            <div><strong>Basement:</strong> <span id="prBsmt">950 SQ FT</span></div>
-            <div><strong>ML Engine:</strong> <span id="prModel">XGBoost Regressor (R² 0.9509)</span></div>
-            <div><strong>Verification Status:</strong> <span>Certified Data-Driven Estimate</span></div>
-        </div>
-
-        <div class="print-footer">
-            <p>Ames Valuation Studio · Powered by Machine Learning on Ames Housing Dataset (10,000 Records, 79 Features).</p>
-        </div>
-    </div>
 
     <!-- Pure White Footer with Preserved AVS Logo -->
     <footer class="clean-white-footer">

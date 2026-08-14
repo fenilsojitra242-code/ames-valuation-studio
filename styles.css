@@ -736,36 +736,6 @@ body {
     50% { transform: scale(1.6); opacity: 0; }
 }
 
-/* Result Action Button */
-.result-actions-strip {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 3rem;
-    flex-wrap: wrap;
-}
-
-.btn-result-action {
-    font-family: var(--font-sans);
-    font-size: 0.92rem;
-    font-weight: 700;
-    padding: 0.85rem 1.75rem;
-    border-radius: var(--radius-btn);
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.btn-solid-red {
-    background: var(--signal-red);
-    border: 1.5px solid var(--signal-red);
-    color: var(--pure-white);
-}
-
-.btn-solid-red:hover {
-    background: #e0281d;
-    transform: translateY(-2px);
-}
-
 /* Horizontal Editorial Strip */
 .horizontal-editorial-strip {
     display: flex;
@@ -1104,85 +1074,5 @@ body {
 
     .horizontal-editorial-strip {
         grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-/* Printable Certificate Strict 1-Page Layout */
-.print-only-sheet { display: none; }
-
-@media print {
-    @page {
-        size: A4 portrait;
-        margin: 1.2cm;
-    }
-
-    html, body {
-        background: #ffffff !important;
-        color: #111111 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        height: auto !important;
-        min-height: auto !important;
-        overflow: visible !important;
-    }
-
-    nav, section, footer, .swiss-prediction-overlay, .hero-3d-architecture-col {
-        display: none !important;
-    }
-
-    #printAppraisalContainer {
-        display: block !important;
-        position: static !important;
-        width: 100% !important;
-        max-width: 680px !important;
-        margin: 0 auto !important;
-        padding: 20px !important;
-        box-sizing: border-box !important;
-        page-break-inside: avoid !important;
-        page-break-after: avoid !important;
-        page-break-before: avoid !important;
-        break-inside: avoid !important;
-    }
-
-    .print-header {
-        border-bottom: 2.5px solid #111;
-        padding-bottom: 12px;
-        margin-bottom: 18px;
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
-    }
-    .print-header h2 { font-size: 20px; font-weight: 800; margin: 0; color: #111; }
-    .print-header span { font-family: var(--font-mono); font-size: 11px; font-weight: 700; color: #555; }
-    .print-timestamp { font-family: var(--font-mono); font-size: 11px; color: #666; margin: 0; }
-
-    .print-price-box {
-        background: #F0F4FF;
-        border: 1.5px solid #111;
-        padding: 18px;
-        text-align: center;
-        margin-bottom: 22px;
-        border-radius: 6px;
-    }
-    .p-sub { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; color: #555; }
-    .p-price { font-size: 38px; font-weight: 800; margin: 6px 0; color: #111; }
-    .p-range { font-size: 13px; color: #333; margin: 0; }
-
-    .print-specs-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px 24px;
-        border-bottom: 1px solid #ccc;
-        padding-bottom: 20px;
-        margin-bottom: 20px;
-    }
-    .print-specs-grid div { font-size: 13px; line-height: 1.45; }
-    .print-specs-grid strong { color: #111; font-weight: 700; }
-
-    .print-footer {
-        text-align: center;
-        font-size: 10.5px;
-        color: #777;
-        font-family: var(--font-mono);
     }
 }
