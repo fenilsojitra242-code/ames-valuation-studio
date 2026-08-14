@@ -117,18 +117,45 @@ document.addEventListener('DOMContentLoaded', () => {
         fetchLeaderboardMetrics();
     }
 
-    // 1. Navigation Scroll Effect
+    // 1. Navigation Scroll & Mobile Drawer Handler
     function setupNavScroll() {
         const nav = document.getElementById('mainNav');
-        if (!nav) return;
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
 
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 30) {
-                nav.style.borderColor = '#111111';
-            } else {
-                nav.style.borderColor = '#E9E9E7';
-            }
-        });
+        if (nav) {
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 30) {
+                    nav.style.borderColor = '#111111';
+                } else {
+                    nav.style.borderColor = '#E9E9E7';
+                }
+            });
+        }
+
+        if (mobileMenuBtn && navLinks) {
+            mobileMenuBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                mobileMenuBtn.classList.toggle('active');
+                navLinks.classList.toggle('open');
+            });
+
+            // Close menu when clicking on any navigation link
+            navLinks.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenuBtn.classList.remove('active');
+                    navLinks.classList.remove('open');
+                });
+            });
+
+            // Close menu when tapping outside
+            document.addEventListener('click', (e) => {
+                if (!nav.contains(e.target)) {
+                    mobileMenuBtn.classList.remove('active');
+                    navLinks.classList.remove('open');
+                }
+            });
+        }
     }
 
     // 2. High-End Modern Architectural 3D Villa on Rotating Circular Platform
@@ -940,7 +967,7 @@ document.addEventListener('DOMContentLoaded', () => {
         step();
     }
 
-    // 15. Animated Dataset Canvas Scatter Plot
+    // 15. Animated Dataset Canvas Scatter Plot (Responsive)
     function initScatterPlot() {
         const canvas = document.getElementById('scatterCanvas');
         if (!canvas) return;
@@ -948,8 +975,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const ctx = canvas.getContext('2d');
         const tooltip = document.getElementById('scatterTooltip');
 
-        const w = canvas.width = canvas.parentElement.clientWidth || 1000;
-        const h = canvas.height = 450;
+        let w = canvas.width = canvas.parentElement.clientWidth || 1000;
+        let h = canvas.height = Math.min(450, Math.max(280, Math.round(w * 0.45)));
 
         // Generate 140 Real Ames Dataset Benchmark Points
         const points = [];
@@ -968,28 +995,29 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.strokeStyle = '#E9E9E7';
             ctx.lineWidth = 1;
 
-            for (let x = 70; x < w - 30; x += 120) {
-                ctx.beginPath(); ctx.moveTo(x, 20); ctx.lineTo(x, h - 40); ctx.stroke();
+            const xStep = Math.max(60, Math.round(w / 8));
+            for (let x = 60; x < w - 20; x += xStep) {
+                ctx.beginPath(); ctx.moveTo(x, 20); ctx.lineTo(x, h - 35); ctx.stroke();
             }
-            for (let y = 30; y < h - 40; y += 70) {
-                ctx.beginPath(); ctx.moveTo(70, y); ctx.lineTo(w - 30, y); ctx.stroke();
+            for (let y = 30; y < h - 35; y += 60) {
+                ctx.beginPath(); ctx.moveTo(60, y); ctx.lineTo(w - 20, y); ctx.stroke();
             }
 
             // Scatter Points (Electric Blue)
             points.forEach((p, idx) => {
-                const cx = 70 + ((p.area - 500) / 3500) * (w - 120);
-                const cy = (h - 40) - ((p.price - 35000) / 350000) * (h - 70) * Math.min(1, progress * (idx / 100 + 0.5));
+                const cx = 60 + ((p.area - 500) / 3500) * (w - 85);
+                const cy = (h - 35) - ((p.price - 35000) / 350000) * (h - 65) * Math.min(1, progress * (idx / 100 + 0.5));
 
                 ctx.beginPath();
-                ctx.arc(cx, cy, 4, 0, Math.PI * 2);
+                ctx.arc(cx, cy, w < 500 ? 3 : 4, 0, Math.PI * 2);
                 ctx.fillStyle = idx === 42 ? '#FF3B30' : '#4169FF'; // Selected point in Signal Red
                 ctx.fill();
             });
 
             // Regression Trend Line (Signal Red)
             ctx.beginPath();
-            ctx.moveTo(70, h - 50);
-            ctx.lineTo(70 + (w - 120) * progress, (h - 40) - (330000 / 350000) * (h - 70) * progress);
+            ctx.moveTo(60, h - 45);
+            ctx.lineTo(60 + (w - 85) * progress, (h - 35) - (330000 / 350000) * (h - 65) * progress);
             ctx.strokeStyle = '#FF3B30';
             ctx.lineWidth = 2;
             ctx.stroke();
@@ -1002,28 +1030,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
         draw();
 
-        // Scatter Hover Tooltip
-        canvas.addEventListener('mousemove', (e) => {
+        // Responsive Resize Handler
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                w = canvas.width = canvas.parentElement.clientWidth || 1000;
+                h = canvas.height = Math.min(450, Math.max(280, Math.round(w * 0.45)));
+                progress = 1;
+                draw();
+            }, 100);
+        });
+
+        // Scatter Hover / Touch Tooltip
+        function handlePointer(clientX, clientY) {
             const rect = canvas.getBoundingClientRect();
-            const mx = e.clientX - rect.left;
-            const my = e.clientY - rect.top;
+            const mx = clientX - rect.left;
+            const my = clientY - rect.top;
 
             let found = null;
             points.forEach(p => {
-                const cx = 70 + ((p.area - 500) / 3500) * (w - 120);
-                const cy = (h - 40) - ((p.price - 35000) / 350000) * (h - 70);
-                if (Math.hypot(mx - cx, my - cy) < 8) found = p;
+                const cx = 60 + ((p.area - 500) / 3500) * (w - 85);
+                const cy = (h - 35) - ((p.price - 35000) / 350000) * (h - 65);
+                const dist = Math.hypot(mx - cx, my - cy);
+                if (dist < 12) found = { ...p, cx, cy };
             });
 
             if (found && tooltip) {
                 tooltip.classList.remove('hidden');
-                tooltip.style.left = `${mx + 12}px`;
-                tooltip.style.top = `${my - 28}px`;
-                tooltip.innerText = `${found.area} SQ FT | $${found.price.toLocaleString()} | QUAL ${found.qual}`;
+                tooltip.style.left = `${found.cx + 12}px`;
+                tooltip.style.top = `${found.cy - 12}px`;
+                tooltip.innerHTML = `<strong>${found.area.toLocaleString()} SF</strong> → $${found.price.toLocaleString()} (Qual: ${found.qual}/10)`;
             } else if (tooltip) {
                 tooltip.classList.add('hidden');
             }
-        });
+        }
+
+        canvas.addEventListener('mousemove', (e) => handlePointer(e.clientX, e.clientY));
+        canvas.addEventListener('mouseleave', () => tooltip && tooltip.classList.add('hidden'));
     }
 
     // 16. Character-by-Character JSON Typing Animation
