@@ -1,0 +1,129 @@
+{
+  "dataset_info": {
+    "train_samples": 9986,
+    "test_samples": 1459,
+    "total_features": 82,
+    "target": "SalePrice (Log-Transformed)",
+    "mean_sale_price": 179768.19,
+    "median_sale_price": 161200.0,
+    "min_sale_price": 34900.0,
+    "max_sale_price": 802900.0
+  },
+  "leaderboard": {
+    "XGBoost": {
+      "RMSLE": 0.0964,
+      "RMSE": 17000.16,
+      "MAE": 11937.38,
+      "R2_Score": 0.9509
+    },
+    "Gradient Boosting": {
+      "RMSLE": 0.0964,
+      "RMSE": 16869.84,
+      "MAE": 11888.3,
+      "R2_Score": 0.9516
+    },
+    "Ridge Regression": {
+      "RMSLE": 0.1177,
+      "RMSE": 21364.68,
+      "MAE": 14448.83,
+      "R2_Score": 0.9224
+    },
+    "Lasso Regression": {
+      "RMSLE": 0.1205,
+      "RMSE": 21909.72,
+      "MAE": 14785.75,
+      "R2_Score": 0.9184
+    },
+    "Random Forest": {
+      "RMSLE": 0.0669,
+      "RMSE": 11803.35,
+      "MAE": 8188.33,
+      "R2_Score": 0.9763
+    }
+  },
+  "available_models": [
+    "XGBoost",
+    "Gradient Boosting",
+    "Ridge Regression",
+    "Lasso Regression",
+    "Random Forest"
+  ],
+  "best_model": "XGBoost",
+  "top_feature_importance": [
+    {
+      "feature": "OverallQual",
+      "importance": 0.3525446653366089,
+      "percentage": 100.0
+    },
+    {
+      "feature": "TotalSF",
+      "importance": 0.1607891023159027,
+      "percentage": 45.6
+    },
+    {
+      "feature": "MSZoning_RM",
+      "importance": 0.044280048459768295,
+      "percentage": 12.6
+    },
+    {
+      "feature": "GarageCars",
+      "importance": 0.043571360409259796,
+      "percentage": 12.4
+    },
+    {
+      "feature": "QualCondScore",
+      "importance": 0.04276149719953537,
+      "percentage": 12.1
+    },
+    {
+      "feature": "TotalBaths",
+      "importance": 0.03763403370976448,
+      "percentage": 10.7
+    },
+    {
+      "feature": "Fireplaces",
+      "importance": 0.027613261714577675,
+      "percentage": 7.8
+    },
+    {
+      "feature": "HouseAge",
+      "importance": 0.02153519168496132,
+      "percentage": 6.1
+    },
+    {
+      "feature": "KitchenQual_Gd",
+      "importance": 0.014968487434089184,
+      "percentage": 4.2
+    },
+    {
+      "feature": "KitchenQual_Ex",
+      "importance": 0.014965626411139965,
+      "percentage": 4.2
+    },
+    {
+      "feature": "MSZoning_RL",
+      "importance": 0.014737362042069435,
+      "percentage": 4.2
+    },
+    {
+      "feature": "YearBuilt",
+      "importance": 0.014667178504168987,
+      "percentage": 4.2
+    },
+    {
+      "feature": "MSZoning_'C (all)'",
+      "importance": 0.01361454650759697,
+      "percentage": 3.9
+    },
+    {
+      "feature": "YearRemodAdd",
+      "importance": 0.013516543433070183,
+      "percentage": 3.8
+    },
+    {
+      "feature": "ExterQual_TA",
+      "importance": 0.012675715610384941,
+      "percentage": 3.6
+    }
+  ]
+}

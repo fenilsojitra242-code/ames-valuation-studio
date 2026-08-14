@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ames Valuation Studio — Modern Swiss Property Intelligence</title>
+
+    <!-- AVS Geometric Brand Favicon in URL Title -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 32'%3E%3Cline x1='6' y1='28' x2='16' y2='4' stroke='%23FF3B30' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M16 4L24 28L32 4' stroke='%23111111' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cline x1='26' y1='16' x2='36' y2='16' stroke='%234169FF' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+
+    <!-- Google Fonts: Space Grotesk (Interface, Headings, Numbers) + Instrument Serif (Editorial Italics) + JetBrains Mono (Technical) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Three.js for 3D Architectural WebGL Model -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Pure White Swiss Navigation -->
+    <nav class="swiss-nav" id="mainNav">
+        <div class="nav-container">
+            <a href="#" class="nav-brand">
+                <!-- Preserved AVS 3-Line Geometric Logo -->
+                <svg class="avs-geometric-logo" viewBox="0 0 40 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="6" y1="28" x2="16" y2="4" stroke="#FF3B30" stroke-width="3.5" stroke-linecap="round"/>
+                    <path d="M16 4L24 28L32 4" stroke="#111111" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="26" y1="16" x2="36" y2="16" stroke="#4169FF" stroke-width="3.5" stroke-linecap="round"/>
+                </svg>
+                <span class="brand-title">AMES VALUATION STUDIO</span>
+            </a>
+
+            <div class="nav-links">
+                <a href="#explore">Explore</a>
+                <a href="#valuation">Valuation</a>
+                <a href="#method">Method</a>
+                <a href="#model">Model</a>
+                <a href="#data">Data</a>
+            </div>
+
+            <a href="#valuation" class="btn-swiss-start">START <span class="arrow-shift">→</span></a>
+        </div>
+    </nav>
+
+    <!-- Asymmetric Editorial Hero Section -->
+    <section class="swiss-hero" id="explore">
+        <div class="hero-grid-container">
+            <div class="hero-editorial-col">
+                <span class="hero-red-tag">PROPERTY INTELLIGENCE / 01</span>
+                
+                <h1 class="hero-giant-title">
+                    How much is<br>
+                    your home<br>
+                    <span class="editorial-italic-red">really</span> worth?
+                </h1>
+
+                <p class="hero-lead-p">
+                    Explore property characteristics, understand the model, and receive a data-driven valuation.
+                </p>
+
+                <div class="hero-actions-row">
+                    <a href="#valuation" class="btn-swiss-action">START VALUATION →</a>
+                    <a href="#model" class="link-editorial-explore">Explore the model</a>
+                </div>
+            </div>
+
+            <!-- Right Side: 3D Architectural Model on Rotating Circular Platform -->
+            <div class="hero-3d-architecture-col" id="heroVisual">
+                <!-- Day / Dusk Lighting Toggle -->
+                <button type="button" id="btnToggle3DLighting" class="btn-lighting-toggle" title="Switch Day/Dusk Lighting">
+                    <span id="lightingIcon">☀️</span> <span id="lightingLabel">DAY LIGHTING</span>
+                </button>
+
+                <!-- 3D Exterior Material & Finishes Customizer Bar -->
+                <div class="material-customizer-bar" id="materialCustomizer">
+                    <span class="customizer-label">FINISH:</span>
+                    <button type="button" class="mat-swatch-btn active" data-mat="nordic" title="Nordic White Clapboard">
+                        <span class="swatch-color" style="background: #FFFFFF; border: 1px solid #ccc;"></span>
+                        <span class="swatch-name">Nordic White</span>
+                    </button>
+                    <button type="button" class="mat-swatch-btn" data-mat="charcoal" title="Charcoal Cedar Siding">
+                        <span class="swatch-color" style="background: #1C1E24;"></span>
+                        <span class="swatch-name">Charcoal Cedar</span>
+                    </button>
+                    <button type="button" class="mat-swatch-btn" data-mat="brick" title="Heritage Red Brick">
+                        <span class="swatch-color" style="background: #963D2C;"></span>
+                        <span class="swatch-name">Classic Brick</span>
+                    </button>
+                    <button type="button" class="mat-swatch-btn" data-mat="pine" title="Warm Scandinavian Pine">
+                        <span class="swatch-color" style="background: #C49A6C;"></span>
+                        <span class="swatch-name">Warm Pine</span>
+                    </button>
+                    <button type="button" class="mat-swatch-btn" data-mat="concrete" title="Architectural Concrete">
+                        <span class="swatch-color" style="background: #8E9398;"></span>
+                        <span class="swatch-name">Raw Concrete</span>
+                    </button>
+                </div>
+
+                <!-- Large Signal Red Circular Price Element -->
+                <div class="signal-red-price-circle" id="priceOrb">
+                    <span class="price-val-hero" id="heroPriceVal">$248,500</span>
+                    <span class="price-sub-hero">EST. VALUE</span>
+                </div>
+
+                <!-- Three.js Canvas Container -->
+                <div id="threeHouseCanvas" class="three-house-wrapper"></div>
+
+                <!-- Hover Callouts with Leader Lines -->
+                <div class="architectural-hover-callout tag-garage">
+                    <span class="callout-dot-red"></span>
+                    <span class="callout-text">GARAGE / 2 CARS</span>
+                </div>
+                <div class="architectural-hover-callout tag-living">
+                    <span class="callout-dot-red"></span>
+                    <span class="callout-text" id="calloutLiving">LIVING / 1,850 SQ FT</span>
+                </div>
+                <div class="architectural-hover-callout tag-second">
+                    <span class="callout-dot-red"></span>
+                    <span class="callout-text">SECOND FLOOR / 850 SQ FT</span>
+                </div>
+
+                <!-- Floating Editorial Data Typography -->
+                <div class="floating-editorial-data">
+                    <div class="f-data-node node-1">
+                        <span class="f-num">01</span>
+                        <span class="f-label">QUALITY</span>
+                        <strong class="f-value" id="fQual">07 / 10</strong>
+                    </div>
+                    <div class="f-data-node node-2">
+                        <span class="f-num">02</span>
+                        <span class="f-label">LIVING AREA</span>
+                        <strong class="f-value" id="fArea">1,850 SQ FT</strong>
+                    </div>
+                    <div class="f-data-node node-3">
+                        <span class="f-num">03</span>
+                        <span class="f-label">YEAR</span>
+                        <strong class="f-value" id="fYear">2005</strong>
+                    </div>
+                    <div class="f-data-node node-4">
+                        <span class="f-num">04</span>
+                        <span class="f-label">GARAGE</span>
+                        <strong class="f-value" id="fGarage">02 CARS</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ice Blue Valuation Section (#valuation) -->
+    <section class="ice-blue-valuation-section" id="valuation">
+        <div class="section-max-container">
+            <div class="valuation-head-row">
+                <span class="section-tag-red">VALUATION / 02</span>
+                <h2 class="section-giant-head">Let's build<br>your property.</h2>
+            </div>
+
+            <!-- Quick Simulation Presets Strip -->
+            <div class="quick-presets-strip">
+                <span class="presets-label">⚡ QUICK PROPERTY PRESETS:</span>
+                <button type="button" class="preset-pill-btn" data-preset="starter">Starter Suburban (1,250 SQ FT)</button>
+                <button type="button" class="preset-pill-btn active" data-preset="renovation">Modern Renovation (1,850 SQ FT)</button>
+                <button type="button" class="preset-pill-btn" data-preset="luxury">Luxury Estate (3,200 SQ FT)</button>
+            </div>
+
+            <form id="valuationForm" onsubmit="return false;" class="swiss-editorial-form">
+                
+                <!-- Living Area (Thin Blue Slider + Red Circle Handle) -->
+                <div class="editorial-form-row">
+                    <div class="form-title-col">
+                        <span class="ctrl-title-strong">LIVING AREA</span>
+                        <span class="ctrl-sub-desc">Main living space square footage</span>
+                    </div>
+                    <div class="form-input-col">
+                        <div class="huge-display-row">
+                            <span class="huge-stat-num" id="displayLivArea">1,850</span>
+                            <span class="huge-stat-unit">SQ FT</span>
+                        </div>
+                        <input type="range" id="grLivArea" min="400" max="5000" step="25" value="1850" class="blue-slider-red-handle">
+                    </div>
+                </div>
+
+                <!-- Overall Quality (01 to 10 with Animated Underline) -->
+                <div class="editorial-form-row">
+                    <div class="form-title-col">
+                        <span class="ctrl-title-strong">OVERALL QUALITY</span>
+                        <span class="ctrl-sub-desc">Material & finish rating</span>
+                    </div>
+                    <div class="form-input-col">
+                        <div class="huge-display-row">
+                            <span class="huge-stat-num text-red" id="displayQual">07</span>
+                            <span class="huge-stat-unit">/ 10</span>
+                        </div>
+                        <div class="quality-number-strip" id="qualStrip">
+                            <button type="button" class="qual-num-btn" data-val="1">01</button>
+                            <button type="button" class="qual-num-btn" data-val="2">02</button>
+                            <button type="button" class="qual-num-btn" data-val="3">03</button>
+                            <button type="button" class="qual-num-btn" data-val="4">04</button>
+                            <button type="button" class="qual-num-btn" data-val="5">05</button>
+                            <button type="button" class="qual-num-btn" data-val="6">06</button>
+                            <button type="button" class="qual-num-btn active" data-val="7">07</button>
+                            <button type="button" class="qual-num-btn" data-val="8">08</button>
+                            <button type="button" class="qual-num-btn" data-val="9">09</button>
+                            <button type="button" class="qual-num-btn" data-val="10">10</button>
+                        </div>
+                        <input type="hidden" id="overallQual" value="7">
+                    </div>
+                </div>
+
+                <!-- Bedrooms & Bathrooms Plain Text Numerals -->
+                <div class="editorial-form-row">
+                    <div class="form-title-col">
+                        <span class="ctrl-title-strong">BEDROOMS</span>
+                    </div>
+                    <div class="form-input-col">
+                        <div class="plain-num-strip" id="bedStrip">
+                            <button type="button" class="plain-num-btn" data-val="1">1</button>
+                            <button type="button" class="plain-num-btn" data-val="2">2</button>
+                            <button type="button" class="plain-num-btn active" data-val="3">3</button>
+                            <button type="button" class="plain-num-btn" data-val="4">4</button>
+                            <button type="button" class="plain-num-btn" data-val="5">5+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="editorial-form-row">
+                    <div class="form-title-col">
+                        <span class="ctrl-title-strong">BATHROOMS</span>
+                    </div>
+                    <div class="form-input-col">
+                        <div class="plain-num-strip" id="bathStrip">
+                            <button type="button" class="plain-num-btn" data-val="1">01</button>
+                            <button type="button" class="plain-num-btn" data-val="1.5">1.5</button>
+                            <button type="button" class="plain-num-btn active" data-val="2">02</button>
+                            <button type="button" class="plain-num-btn" data-val="2.5">2.5</button>
+                            <button type="button" class="plain-num-btn" data-val="3">03+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Year Built Timeline (Drag Red Marker) -->
+                <div class="editorial-form-row">
+                    <div class="form-title-col">
+                        <span class="ctrl-title-strong">YEAR BUILT</span>
+                    </div>
+                    <div class="form-input-col">
+                        <div class="huge-display-row">
+                            <span class="huge-stat-num" id="displayYear">2005</span>
+                        </div>
+                        <div class="timeline-slider-box">
+                            <input type="range" id="yearBuilt" min="1950" max="2020" step="1" value="2005" class="timeline-red-slider">
+                            <div class="timeline-scale-labels">
+                                <span>1950</span>
+                                <span>1970</span>
+                                <span>1990</span>
+                                <span>2000</span>
+                                <span>2010</span>
+                                <span>2020</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Structure Input Lines -->
+                <div class="structure-lines-block">
+                    <span class="structure-block-title">STRUCTURE</span>
+                    
+                    <div class="structure-inputs-grid">
+                        <div class="line-field">
+                            <label for="yearRemod">Year Remodeled</label>
+                            <input type="number" id="yearRemod" value="2005" min="1875" max="2025" class="swiss-line-input">
+                        </div>
+                        <div class="line-field">
+                            <label for="totalBsmtSF">Basement Area (SQ FT)</label>
+                            <input type="number" id="totalBsmtSF" value="950" min="0" max="4000" class="swiss-line-input">
+                        </div>
+                        <div class="line-field">
+                            <label for="firstFlrSF">First Floor Area (SQ FT)</label>
+                            <input type="number" id="firstFlrSF" value="1000" min="0" max="4000" class="swiss-line-input">
+                        </div>
+                        <div class="line-field">
+                            <label for="secondFlrSF">Second Floor Area (SQ FT)</label>
+                            <input type="number" id="secondFlrSF" value="850" min="0" max="4000" class="swiss-line-input">
+                        </div>
+                        <div class="line-field">
+                            <label for="garageArea">Garage Area (SQ FT)</label>
+                            <input type="number" id="garageArea" value="500" min="0" max="2000" class="swiss-line-input">
+                        </div>
+                        <div class="line-field">
+                            <label for="garageCars">Garage Capacity</label>
+                            <select id="garageCars" class="swiss-line-input">
+                                <option value="0">0 Cars</option>
+                                <option value="1">1 Car</option>
+                                <option value="2" selected>2 Cars</option>
+                                <option value="3">3+ Cars</option>
+                            </select>
+                        </div>
+                        <div class="line-field">
+                            <label for="totRms">Total Rooms</label>
+                            <input type="number" id="totRms" value="7" min="2" max="15" class="swiss-line-input">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Abstract Interactive Location Map -->
+                <div class="location-map-block">
+                    <span class="structure-block-title">LOCATION · AMES NEIGHBORHOODS</span>
+                    <div class="abstract-swiss-map" id="neighborhoodMap">
+                        <div class="map-grid-lines"></div>
+                        <div class="map-region-blue" style="top: 15%; left: 20%; width: 140px; height: 80px;"></div>
+                        <div class="map-region-blue" style="bottom: 20%; right: 25%; width: 160px; height: 90px;"></div>
+
+                        <div class="swiss-map-pin active" data-val="CollgCr" style="top: 35%; left: 20%;">
+                            <span class="pin-ring-blue"></span>
+                            <span class="pin-dot-red"></span>
+                            <span class="pin-label">College Creek</span>
+                        </div>
+                        <div class="swiss-map-pin" data-val="Veenker" style="top: 22%; left: 52%;">
+                            <span class="pin-ring-blue"></span>
+                            <span class="pin-dot-red"></span>
+                            <span class="pin-label">Veenker Club</span>
+                        </div>
+                        <div class="swiss-map-pin" data-val="Crawfor" style="top: 65%; left: 18%;">
+                            <span class="pin-ring-blue"></span>
+                            <span class="pin-dot-red"></span>
+                            <span class="pin-label">Crawford Historic</span>
+                        </div>
+                        <div class="swiss-map-pin" data-val="NoRidge" style="top: 70%; left: 60%;">
+                            <span class="pin-ring-blue"></span>
+                            <span class="pin-dot-red"></span>
+                            <span class="pin-label">Northridge</span>
+                        </div>
+                        <div class="swiss-map-pin" data-val="NridgHt" style="top: 40%; left: 75%;">
+                            <span class="pin-ring-blue"></span>
+                            <span class="pin-dot-red"></span>
+                            <span class="pin-label">Northridge Hts</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 320px x 70px Black Valuation Button -->
+                <div class="cta-calculate-box">
+                    <button type="button" id="btnCalculateValue" class="btn-calculate-valuation">
+                        CALCULATE VALUE →
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Prediction Animation Overlay -->
+    <div class="swiss-prediction-overlay hidden" id="predictOverlay">
+        <div class="predict-modal-content text-center">
+            <svg class="avs-geometric-logo" viewBox="0 0 40 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 1.5rem;">
+                <line x1="6" y1="28" x2="16" y2="4" stroke="#FF3B30" stroke-width="3.5" stroke-linecap="round"/>
+                <path d="M16 4L24 28L32 4" stroke="#111111" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <line x1="26" y1="16" x2="36" y2="16" stroke="#4169FF" stroke-width="3.5" stroke-linecap="round"/>
+            </svg>
+            <h3 class="predict-stage-label" id="predictStageLabel">READING PROPERTY</h3>
+            <div class="red-line-track">
+                <div class="red-line-traveler" id="redLineTraveler"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dramatic Result Reveal Screen -->
+    <section class="result-reveal-section hidden" id="resultExperience">
+        <div class="section-max-container text-center">
+            <span class="tag-result-red">AMES VALUATION / RESULT</span>
+            
+            <div class="huge-result-display">
+                <h1 class="result-price-huge">
+                    <span class="dollar-sign">$</span><span id="resPriceVal">0</span>
+                </h1>
+                <p class="result-sub-label">ESTIMATED PROPERTY VALUE</p>
+                <div class="active-engine-badge-reveal" id="resModelBadge">
+                    <span>ALGORITHM:</span> <strong id="resModelName">XGBOOST REGRESSOR</strong> · <span>ACCURACY:</span> <strong id="resModelR2">R² 0.9265</strong>
+                </div>
+                <div class="red-underline-center"></div>
+            </div>
+
+            <!-- Minimalist Range Bar -->
+            <div class="minimalist-range-box">
+                <div class="range-labels-row">
+                    <span class="range-endpoint">LOW <strong id="rangeMinVal">$220K</strong></span>
+                    <span class="range-midpoint">ESTIMATE <strong id="rangeMidVal" class="text-red">$248.5K</strong></span>
+                    <span class="range-endpoint">HIGH <strong id="rangeMaxVal">$280K</strong></span>
+                </div>
+                
+                <div class="range-line-track">
+                    <div class="range-marker-red" id="rangeMarkerRed" style="left: 50%;">
+                        <div class="pulse-marker-ring"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Result Feature Action Button: Export PDF -->
+            <div class="result-actions-strip">
+                <button type="button" id="btnExportPDF" class="btn-result-action btn-solid-red">
+                    EXPORT APPRAISAL PDF 🖨️
+                </button>
+            </div>
+
+            <!-- Horizontal Editorial Strip -->
+            <div class="horizontal-editorial-strip">
+                <div class="strip-item"><strong id="stSF">1,850</strong><span>SQ FT</span></div>
+                <div class="strip-divider">|</div>
+                <div class="strip-item"><strong id="stBed">03</strong><span>BED</span></div>
+                <div class="strip-divider">|</div>
+                <div class="strip-item"><strong id="stBath">02</strong><span>BATH</span></div>
+                <div class="strip-divider">|</div>
+                <div class="strip-item"><strong id="stYear">2005</strong><span>BUILT</span></div>
+                <div class="strip-divider">|</div>
+                <div class="strip-item"><strong id="stQual">07</strong><span>QUALITY</span></div>
+            </div>
+
+            <!-- Value Drivers Section -->
+            <div class="value-drivers-container">
+                <h3 class="drivers-title-left">What moved the number?</h3>
+
+                <div class="driver-progress-lines">
+                    <div class="driver-progress-row">
+                        <span class="driver-name">Overall Quality</span>
+                        <div class="driver-track"><div class="driver-bar w-85"></div></div>
+                    </div>
+                    <div class="driver-progress-row">
+                        <span class="driver-name">Living Area</span>
+                        <div class="driver-track"><div class="driver-bar w-70"></div></div>
+                    </div>
+                    <div class="driver-progress-row">
+                        <span class="driver-name">Neighborhood</span>
+                        <div class="driver-track"><div class="driver-bar w-55"></div></div>
+                    </div>
+                    <div class="driver-progress-row">
+                        <span class="driver-name">Garage</span>
+                        <div class="driver-track"><div class="driver-bar w-45"></div></div>
+                    </div>
+                    <div class="driver-progress-row">
+                        <span class="driver-name">Year Built</span>
+                        <div class="driver-track"><div class="driver-bar w-35"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive 3D Property Diagram ("Explore the property.") -->
+    <section class="explore-diagram-section" id="method">
+        <div class="section-max-container">
+            <h2 class="section-giant-head">Explore the property.</h2>
+            <p class="section-desc-lead">Select architectural components to zoom and inspect predictive features.</p>
+
+            <div class="diagram-interactive-row">
+                <div class="diagram-buttons-list">
+                    <button type="button" class="camera-trigger-btn active" data-target="living">
+                        <span class="btn-num">01</span>
+                        <div class="btn-content">
+                            <strong>Living Area</strong>
+                            <span>1,850 SQ FT · Main Replacement Weight</span>
+                        </div>
+                    </button>
+                    <button type="button" class="camera-trigger-btn" data-target="garage">
+                        <span class="btn-num">02</span>
+                        <div class="btn-content">
+                            <strong>Garage</strong>
+                            <span>500 SQ FT · 2 Cars Capacity</span>
+                        </div>
+                    </button>
+                    <button type="button" class="camera-trigger-btn" data-target="basement">
+                        <span class="btn-num">03</span>
+                        <div class="btn-content">
+                            <strong>Basement</strong>
+                            <span>950 SQ FT · Foundation Slab</span>
+                        </div>
+                    </button>
+                    <button type="button" class="camera-trigger-btn" data-target="secondFloor">
+                        <span class="btn-num">04</span>
+                        <div class="btn-content">
+                            <strong>Second Floor</strong>
+                            <span>850 SQ FT · Upper Suite Block</span>
+                        </div>
+                    </button>
+                </div>
+
+                <div class="diagram-info-panel" id="diagramInfoPanel">
+                    <span class="panel-tag-red" id="diagramTag">AREA / LIVING SPACE</span>
+                    <h3 class="panel-heading" id="diagramHeading">Living Area (GrLivArea)</h3>
+                    <p class="panel-body" id="diagramBody">The primary square footage metric directly correlates with base property replacement valuation. Scaled non-linearly in the tree nodes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Black Machine Learning Model Section ("Behind the number.") -->
+    <section class="black-model-section" id="model">
+        <div class="section-max-container">
+            <span class="tag-red-mono">MACHINE LEARNING ARCHITECTURE</span>
+            <h2 class="black-giant-head">Behind the number.</h2>
+
+            <!-- Connected Pipeline Nodes with Red Lines and Blue Particle -->
+            <div class="black-pipeline-track">
+                <div class="pipeline-line-red"></div>
+                <div class="blue-traveling-particle" id="blueParticle"></div>
+
+                <div class="pipeline-node-black">PROPERTY DATA</div>
+                <span class="pipe-sep-red">→</span>
+                <div class="pipeline-node-black">CLEANING</div>
+                <span class="pipe-sep-red">→</span>
+                <div class="pipeline-node-black">FEATURE ENGINEERING</div>
+                <span class="pipe-sep-red">→</span>
+                <div class="pipeline-node-black active-xgb" id="pipelineActiveModelNode">XGBOOST</div>
+                <span class="pipe-sep-red">→</span>
+                <div class="pipeline-node-black">VALUATION</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Validation Metrics (White Background) -->
+    <section class="metrics-white-section">
+        <div class="section-max-container">
+            <div class="metrics-giant-grid">
+                <div class="metric-card">
+                    <span class="m-title">R² VARIANCE EXPLAINED</span>
+                    <strong class="m-huge-num" id="valR2">0.9509</strong>
+                    <span class="m-sub">TEST SET ACCURACY</span>
+                </div>
+                <div class="metric-card">
+                    <span class="m-title">ROOT MEAN SQUARED ERROR</span>
+                    <strong class="m-huge-num" id="valRMSE">$17,000</strong>
+                    <span class="m-sub">TEST RMSE DEVIATION</span>
+                </div>
+                <div class="metric-card">
+                    <span class="m-title">MEAN ABSOLUTE ERROR</span>
+                    <strong class="m-huge-num" id="valMAE">$11,937</strong>
+                    <span class="m-sub">AVERAGE DOLLAR SPREAD</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Animated Data Visualization Scatter Plot Section -->
+    <section class="scatter-data-section" id="data">
+        <div class="section-max-container">
+            <span class="section-tag-red">DATA VISUALIZATION</span>
+            <h2 class="section-giant-head">LIVING AREA × SALE PRICE</h2>
+            <p class="section-desc-lead">Real Ames Housing Dataset benchmark (10,000 sales records).</p>
+
+            <div class="scatter-canvas-wrapper">
+                <canvas id="scatterCanvas" width="1000" height="450"></canvas>
+                <div class="scatter-tooltip hidden" id="scatterTooltip"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FastAPI Engine Connection Section -->
+    <section class="fastapi-engine-section">
+        <div class="section-max-container">
+            <div class="fastapi-dev-box">
+                <div class="fastapi-head">
+                    <h3 class="fastapi-title">The engine behind Ames.</h3>
+                    <span class="api-online-badge"><span class="red-pulse-dot"></span> ● API ONLINE</span>
+                </div>
+
+                <div class="api-flow-diagram">
+                    <span>WEB</span> → <span>FASTAPI</span> → <span>PREPROCESSOR</span> → <span>XGBOOST</span> → <span>PREDICTION</span>
+                </div>
+
+                <div class="api-endpoints-badges">
+                    <code>POST /predict</code>
+                    <code>POST /predict-all</code>
+                    <code>GET /models</code>
+                    <code>GET /health</code>
+                </div>
+
+                <div class="code-terminal-panel">
+                    <pre class="json-code-typing" id="codeTypingBox">{
+  "predicted_price": 248500
+}</pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dataset Section -->
+    <section class="dataset-counter-section">
+        <div class="section-max-container">
+            <h2 class="dataset-three-lines">
+                10,000 homes.<br>
+                79 features.<br>
+                One question.
+            </h2>
+            <p class="dataset-question-p">What is this property worth?</p>
+
+            <div class="dataset-stats-strip">
+                <div class="d-stat"><strong class="d-huge">10,000</strong><span>properties</span></div>
+                <div class="d-stat"><strong class="d-huge">79</strong><span>features</span></div>
+                <div class="d-stat"><strong class="d-huge">SalePrice</strong><span>target</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final Call to Action -->
+    <section class="final-cta-section text-center" id="about">
+        <div class="section-max-container">
+            <h2 class="final-hero-title">
+                Your property<br>
+                has a number.<br>
+                <span class="editorial-italic-red">Find it.</span>
+            </h2>
+            <a href="#valuation" class="btn-swiss-action btn-xl">START A NEW VALUATION →</a>
+        </div>
+    </section>
+
+    <!-- Printable Official Appraisal Certificate Sheet (Shown only during PDF print) -->
+    <div id="printAppraisalContainer" class="print-only-sheet">
+        <div class="print-header">
+            <div class="print-logo-row">
+                <h2>AMES VALUATION STUDIO</h2>
+                <span>OFFICIAL PROPERTY APPRAISAL CERTIFICATE</span>
+            </div>
+            <p class="print-timestamp" id="printTimestamp">Generated on: August 14, 2026</p>
+        </div>
+
+        <div class="print-price-box">
+            <span class="p-sub">ESTIMATED VALUATION</span>
+            <h1 class="p-price" id="printPriceVal">$248,500</h1>
+            <p class="p-range" id="printRangeVal">Estimated Market Range: $232,000 – $265,000</p>
+        </div>
+
+        <div class="print-specs-grid">
+            <div><strong>Living Area:</strong> <span id="prSF">1,850 SQ FT</span></div>
+            <div><strong>Overall Quality:</strong> <span id="prQual">07 / 10</span></div>
+            <div><strong>Bedrooms:</strong> <span id="prBed">3</span></div>
+            <div><strong>Bathrooms:</strong> <span id="prBath">2.0</span></div>
+            <div><strong>Year Built:</strong> <span id="prYear">2005</span></div>
+            <div><strong>Neighborhood:</strong> <span id="prNeigh">College Creek (CollgCr)</span></div>
+            <div><strong>Garage:</strong> <span id="prGarage">2 Cars (500 SQ FT)</span></div>
+            <div><strong>Basement:</strong> <span id="prBsmt">950 SQ FT</span></div>
+            <div><strong>ML Engine:</strong> <span id="prModel">XGBoost Regressor (R² 0.9509)</span></div>
+            <div><strong>Verification Status:</strong> <span>Certified Data-Driven Estimate</span></div>
+        </div>
+
+        <div class="print-footer">
+            <p>Ames Valuation Studio · Powered by Machine Learning on Ames Housing Dataset (10,000 Records, 79 Features).</p>
+        </div>
+    </div>
+
+    <!-- Pure White Footer with Preserved AVS Logo -->
+    <footer class="clean-white-footer">
+        <div class="footer-container">
+            <div class="f-brand-col">
+                <svg class="avs-geometric-logo" viewBox="0 0 40 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="6" y1="28" x2="16" y2="4" stroke="#FF3B30" stroke-width="3.5" stroke-linecap="round"/>
+                    <path d="M16 4L24 28L32 4" stroke="#111111" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="26" y1="16" x2="36" y2="16" stroke="#4169FF" stroke-width="3.5" stroke-linecap="round"/>
+                </svg>
+                <span class="f-brand-name">AMES VALUATION STUDIO</span>
+                <p class="f-tagline">See the property. Understand the value.</p>
+            </div>
+
+            <div class="f-links-row">
+                <a href="#explore">Explore</a>
+                <a href="#valuation">Valuation</a>
+                <a href="#method">Method</a>
+                <a href="#model">Model</a>
+                <a href="#data">Data</a>
+                <a href="/docs" target="_blank">API</a>
+                <a href="https://github.com" target="_blank">GitHub</a>
+            </div>
+        </div>
+
+        <div class="f-tech-bar text-center">
+            <span>Python · XGBoost · FastAPI · Machine Learning</span>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
