@@ -861,9 +861,8 @@ document.addEventListener('DOMContentLoaded', () => {
         window.requestAnimationFrame(step);
     }
 
-    // 13. Result Action: Printable PDF Export
+    // 13. Result Action: Direct 1-Click PDF Download
     function setupResultActionModals() {
-        // Export PDF Appraisal Report
         const btnExportPDF = document.getElementById('btnExportPDF');
         if (btnExportPDF) {
             btnExportPDF.addEventListener('click', () => {
@@ -872,7 +871,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const minRange = lastValuationResult?.estimated_price_range?.min || Math.round(price * 0.92);
                 const maxRange = lastValuationResult?.estimated_price_range?.max || Math.round(price * 1.08);
 
-                // Populate Printable Certificate
+                // Populate Printable Certificate Content
                 if (document.getElementById('printPriceVal')) document.getElementById('printPriceVal').innerText = `$${Math.round(price).toLocaleString()}`;
                 if (document.getElementById('printRangeVal')) document.getElementById('printRangeVal').innerText = `Estimated Market Range: $${Math.round(minRange).toLocaleString()} – $${Math.round(maxRange).toLocaleString()}`;
                 if (document.getElementById('prSF')) document.getElementById('prSF').innerText = `${payload.GrLivArea.toLocaleString()} SQ FT`;
@@ -883,10 +882,59 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (document.getElementById('prNeigh')) document.getElementById('prNeigh').innerText = `${neighborhoodData[selectedNeighborhood]?.name || selectedNeighborhood}`;
                 if (document.getElementById('prGarage')) document.getElementById('prGarage').innerText = `${payload.GarageCars} Cars (${payload.GarageArea} SQ FT)`;
                 if (document.getElementById('prBsmt')) document.getElementById('prBsmt').innerText = `${payload.TotalBsmtSF} SQ FT`;
-                if (document.getElementById('prModel')) document.getElementById('prModel').innerText = `Optimal XGBoost Regressor (R² 0.9265)`;
+                if (document.getElementById('prModel')) document.getElementById('prModel').innerText = `Optimal XGBoost Regressor (R² 0.9509)`;
                 if (document.getElementById('printTimestamp')) document.getElementById('printTimestamp').innerText = `Generated on: ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`;
 
-                window.print();
+                const origBtnText = btnExportPDF.innerText;
+                btnExportPDF.innerText = 'GENERATING PDF...';
+
+                const printContainer = document.getElementById('printAppraisalContainer');
+                if (!printContainer) {
+                    btnExportPDF.innerText = origBtnText;
+                    window.print();
+                    return;
+                }
+
+                // Prepare offscreen cloned element for clean A4 portrait PDF capture
+                const clone = printContainer.cloneNode(true);
+                clone.id = 'printAppraisalClone';
+                clone.style.display = 'block';
+                clone.style.position = 'absolute';
+                clone.style.left = '-9999px';
+                clone.style.top = '0';
+                clone.style.width = '700px';
+                clone.style.backgroundColor = '#FFFFFF';
+                clone.style.color = '#111111';
+                clone.style.padding = '28px';
+                clone.style.boxSizing = 'border-box';
+                clone.style.fontFamily = "'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif";
+                document.body.appendChild(clone);
+
+                const opt = {
+                    margin: [8, 8, 8, 8],
+                    filename: `Ames_Property_Appraisal_Certificate.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true, letterRendering: true, logging: false },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
+
+                if (typeof html2pdf !== 'undefined') {
+                    html2pdf().set(opt).from(clone).save()
+                        .then(() => {
+                            if (document.body.contains(clone)) document.body.removeChild(clone);
+                            btnExportPDF.innerText = origBtnText;
+                        })
+                        .catch(err => {
+                            console.error('Direct PDF error, falling back to window.print:', err);
+                            if (document.body.contains(clone)) document.body.removeChild(clone);
+                            btnExportPDF.innerText = origBtnText;
+                            window.print();
+                        });
+                } else {
+                    if (document.body.contains(clone)) document.body.removeChild(clone);
+                    btnExportPDF.innerText = origBtnText;
+                    window.print();
+                }
             });
         }
     }
