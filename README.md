@@ -40,8 +40,8 @@ An AI-powered house price prediction platform and interactive 3D property valuat
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/house_price.git
-cd house_price
+git clone https://github.com/fenilsojitra242-code/ames-valuation-studio.git
+cd ames-valuation-studio
 ```
 
 ### 2. Install Dependencies
@@ -49,9 +49,8 @@ cd house_price
 pip install -r requirements.txt
 ```
 
-### 3. Generate 10k Dataset & Train Models (Optional)
+### 3. Retrain Models (Optional)
 ```bash
-python expand_dataset.py
 python train_model.py
 ```
 
