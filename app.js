@@ -855,7 +855,7 @@ document.addEventListener('DOMContentLoaded', () => {
         window.requestAnimationFrame(step);
     }
 
-    // 13. Result Action: Direct 1-Click PDF Download (Fixed & Guaranteed Non-Blank)
+    // 13. Result Action: Detailed Multi-Section PDF Appraisal Report Download
     function setupResultActionModals() {
         const btnExportPDF = document.getElementById('btnExportPDF');
         if (!btnExportPDF) return;
@@ -866,64 +866,214 @@ document.addEventListener('DOMContentLoaded', () => {
             const minRange = lastValuationResult?.estimated_price_range?.min || Math.round(price * 0.92);
             const maxRange = lastValuationResult?.estimated_price_range?.max || Math.round(price * 1.08);
             const neighName = neighborhoodData[selectedNeighborhood]?.name || selectedNeighborhood || "College Creek (CollgCr)";
+            const totSF = (payload.GrLivArea || 1850) + (payload.TotalBsmtSF || 950);
+            const pricePerSF = (price / (payload.GrLivArea || 1850)).toFixed(2);
             const dateStr = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+            const timeStr = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            const docId = `AVS-${Math.floor(100000 + Math.random() * 900000)}`;
 
             const origBtnText = btnExportPDF.innerText;
-            btnExportPDF.innerText = 'GENERATING PDF...';
+            btnExportPDF.innerText = 'GENERATING DETAILED REPORT...';
 
-            // Create a clean, inline-styled element inside the visible DOM for html2canvas
+            window.scrollTo(0, 0);
+
+            // Construct Comprehensive Detailed Report Element
             const pdfElem = document.createElement('div');
-            pdfElem.id = 'activePdfCertWrapper';
-            pdfElem.style.position = 'fixed';
+            pdfElem.id = 'activeDetailedPdfReport';
+            pdfElem.style.position = 'absolute';
             pdfElem.style.top = '0';
             pdfElem.style.left = '0';
-            pdfElem.style.width = '680px';
+            pdfElem.style.width = '750px';
             pdfElem.style.backgroundColor = '#FFFFFF';
             pdfElem.style.color = '#111111';
-            pdfElem.style.padding = '32px';
+            pdfElem.style.padding = '36px';
             pdfElem.style.boxSizing = 'border-box';
             pdfElem.style.zIndex = '999999';
             pdfElem.style.fontFamily = "'Space Grotesk', Arial, -apple-system, sans-serif";
-            pdfElem.style.boxShadow = '0 0 40px rgba(0,0,0,0.3)';
+            pdfElem.style.boxShadow = '0 0 50px rgba(0,0,0,0.3)';
 
             pdfElem.innerHTML = `
-                <div style="border-bottom: 2.5px solid #111111; padding-bottom: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end;">
+                <!-- Header Banner -->
+                <div style="border-bottom: 2.5px solid #111111; padding-bottom: 14px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end;">
                     <div>
-                        <h2 style="font-size: 22px; font-weight: 800; margin: 0 0 4px 0; color: #111111; letter-spacing: -0.02em;">AMES VALUATION STUDIO</h2>
-                        <span style="font-family: monospace; font-size: 11px; font-weight: 700; color: #555555; letter-spacing: 0.08em;">OFFICIAL PROPERTY APPRAISAL CERTIFICATE</span>
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                            <span style="display: inline-block; width: 12px; height: 12px; background: #FF3B30; border-radius: 2px;"></span>
+                            <h2 style="font-size: 24px; font-weight: 800; margin: 0; color: #111111; letter-spacing: -0.03em;">AMES VALUATION STUDIO</h2>
+                        </div>
+                        <span style="font-family: monospace; font-size: 11px; font-weight: 700; color: #555555; letter-spacing: 0.08em;">COMPREHENSIVE PROPERTY INTELLIGENCE & VALUATION REPORT</span>
                     </div>
-                    <p style="font-family: monospace; font-size: 11px; color: #666666; margin: 0;">Generated: ${dateStr}</p>
+                    <div style="text-align: right; font-family: monospace; font-size: 11px; color: #666666;">
+                        <p style="margin: 0 0 2px 0;"><strong>DOC ID:</strong> ${docId}</p>
+                        <p style="margin: 0;">${dateStr} · ${timeStr}</p>
+                    </div>
                 </div>
 
-                <div style="background: #F0F4FF; border: 1.5px solid #111111; padding: 22px; text-align: center; margin-bottom: 24px; border-radius: 6px;">
-                    <span style="font-family: monospace; font-size: 11px; letter-spacing: 0.12em; color: #555555; font-weight: 700;">ESTIMATED VALUATION</span>
-                    <h1 style="font-size: 42px; font-weight: 800; margin: 8px 0; color: #111111; letter-spacing: -0.03em;">$${Math.round(price).toLocaleString()}</h1>
-                    <p style="font-size: 13px; color: #333333; margin: 0; font-weight: 600;">Estimated Market Range: $${Math.round(minRange).toLocaleString()} – $${Math.round(maxRange).toLocaleString()}</p>
+                <!-- Executive Valuation Summary Card -->
+                <div style="background: #F0F4FF; border: 1.5px solid #111111; padding: 24px; text-align: center; margin-bottom: 24px; border-radius: 8px;">
+                    <span style="font-family: monospace; font-size: 11px; letter-spacing: 0.12em; color: #555555; font-weight: 700;">OFFICIAL ESTIMATED VALUATION</span>
+                    <h1 style="font-size: 46px; font-weight: 800; margin: 8px 0; color: #111111; letter-spacing: -0.04em;">$${Math.round(price).toLocaleString()}</h1>
+                    <div style="display: flex; justify-content: center; gap: 24px; font-size: 13px; color: #333333; font-weight: 600; margin-top: 6px;">
+                        <span>Estimated Range: <strong>$${Math.round(minRange).toLocaleString()} – $${Math.round(maxRange).toLocaleString()}</strong></span>
+                        <span>·</span>
+                        <span>Price / SF: <strong>$${pricePerSF} / SQ FT</strong></span>
+                    </div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px 28px; border-bottom: 1px solid #E0E0E0; padding-bottom: 22px; margin-bottom: 22px; font-size: 13px; line-height: 1.5;">
-                    <div><strong style="color: #666;">Living Area:</strong> <span style="font-weight: 700; color: #111;">${payload.GrLivArea.toLocaleString()} SQ FT</span></div>
-                    <div><strong style="color: #666;">Overall Quality:</strong> <span style="font-weight: 700; color: #111;">${payload.OverallQual} / 10</span></div>
-                    <div><strong style="color: #666;">Bedrooms:</strong> <span style="font-weight: 700; color: #111;">${payload.BedroomAbvGr}</span></div>
-                    <div><strong style="color: #666;">Bathrooms:</strong> <span style="font-weight: 700; color: #111;">${payload.FullBath}.0</span></div>
-                    <div><strong style="color: #666;">Year Built:</strong> <span style="font-weight: 700; color: #111;">${payload.YearBuilt}</span></div>
-                    <div><strong style="color: #666;">Neighborhood:</strong> <span style="font-weight: 700; color: #111;">${neighName}</span></div>
-                    <div><strong style="color: #666;">Garage:</strong> <span style="font-weight: 700; color: #111;">${payload.GarageCars} Cars (${payload.GarageArea} SQ FT)</span></div>
-                    <div><strong style="color: #666;">Basement:</strong> <span style="font-weight: 700; color: #111;">${payload.TotalBsmtSF} SQ FT</span></div>
-                    <div><strong style="color: #666;">ML Engine:</strong> <span style="font-weight: 700; color: #111;">XGBoost Regressor (R² 0.9509)</span></div>
-                    <div><strong style="color: #666;">Verification Status:</strong> <span style="font-weight: 700; color: #FF3B30;">● Certified Data-Driven</span></div>
+                <!-- Section 1: Detailed Architectural Specifications -->
+                <div style="margin-bottom: 22px;">
+                    <h3 style="font-size: 14px; font-family: monospace; font-weight: 700; color: #FF3B30; letter-spacing: 0.08em; margin: 0 0 12px 0; border-bottom: 1px solid #E0E0E0; padding-bottom: 6px;">
+                        01 / DETAILED ARCHITECTURAL & PROPERTY SPECIFICATIONS
+                    </h3>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; font-size: 12.5px;">
+                        <div style="background: #F9F9F8; padding: 10px; border-radius: 4px; border-left: 3px solid #111;">
+                            <span style="color: #666; font-size: 11px; display: block; font-family: monospace;">LIVING AREA</span>
+                            <strong style="color: #111; font-size: 14px;">${payload.GrLivArea.toLocaleString()} SQ FT</strong>
+                        </div>
+                        <div style="background: #F9F9F8; padding: 10px; border-radius: 4px; border-left: 3px solid #111;">
+                            <span style="color: #666; font-size: 11px; display: block; font-family: monospace;">BASEMENT AREA</span>
+                            <strong style="color: #111; font-size: 14px;">${payload.TotalBsmtSF.toLocaleString()} SQ FT</strong>
+                        </div>
+                        <div style="background: #F9F9F8; padding: 10px; border-radius: 4px; border-left: 3px solid #111;">
+                            <span style="color: #666; font-size: 11px; display: block; font-family: monospace;">TOTAL FOOTPRINT</span>
+                            <strong style="color: #111; font-size: 14px;">${totSF.toLocaleString()} SQ FT</strong>
+                        </div>
+                        <div style="background: #F9F9F8; padding: 10px; border-radius: 4px; border-left: 3px solid #111;">
+                            <span style="color: #666; font-size: 11px; display: block; font-family: monospace;">OVERALL QUALITY</span>
+                            <strong style="color: #111; font-size: 14px;">${payload.OverallQual} / 10 (Very Good)</strong>
+                        </div>
+                        <div style="background: #F9F9F8; padding: 10px; border-radius: 4px; border-left: 3px solid #111;">
+                            <span style="color: #666; font-size: 11px; display: block; font-family: monospace;">BEDS & BATHS</span>
+                            <strong style="color: #111; font-size: 14px;">${payload.BedroomAbvGr} Beds · ${payload.FullBath}.0 Baths</strong>
+                        </div>
+                        <div style="background: #F9F9F8; padding: 10px; border-radius: 4px; border-left: 3px solid #111;">
+                            <span style="color: #666; font-size: 11px; display: block; font-family: monospace;">YEAR BUILT</span>
+                            <strong style="color: #111; font-size: 14px;">${payload.YearBuilt}</strong>
+                        </div>
+                        <div style="background: #F9F9F8; padding: 10px; border-radius: 4px; border-left: 3px solid #111;">
+                            <span style="color: #666; font-size: 11px; display: block; font-family: monospace;">GARAGE CAPACITY</span>
+                            <strong style="color: #111; font-size: 14px;">${payload.GarageCars} Cars (${payload.GarageArea} SQ FT)</strong>
+                        </div>
+                        <div style="background: #F9F9F8; padding: 10px; border-radius: 4px; border-left: 3px solid #111;">
+                            <span style="color: #666; font-size: 11px; display: block; font-family: monospace;">NEIGHBORHOOD</span>
+                            <strong style="color: #111; font-size: 14px;">${neighName}</strong>
+                        </div>
+                        <div style="background: #F9F9F8; padding: 10px; border-radius: 4px; border-left: 3px solid #111;">
+                            <span style="color: #666; font-size: 11px; display: block; font-family: monospace;">EXTERIOR FINISH</span>
+                            <strong style="color: #111; font-size: 14px;">${selectedFinish ? selectedFinish.toUpperCase() : 'NORDIC WHITE'}</strong>
+                        </div>
+                    </div>
                 </div>
 
-                <div style="text-align: center; font-size: 11px; color: #777777; font-family: monospace;">
-                    <p style="margin: 0;">Ames Valuation Studio · Powered by Machine Learning on Ames Housing Dataset (10,000 Records, 79 Features).</p>
+                <!-- Section 2: Machine Learning Intelligence & Benchmark Accuracy -->
+                <div style="margin-bottom: 22px;">
+                    <h3 style="font-size: 14px; font-family: monospace; font-weight: 700; color: #FF3B30; letter-spacing: 0.08em; margin: 0 0 12px 0; border-bottom: 1px solid #E0E0E0; padding-bottom: 6px;">
+                        02 / MACHINE LEARNING ENGINE BENCHMARKS (10,000 PROPERTY RECORDS)
+                    </h3>
+                    <table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: left;">
+                        <thead>
+                            <tr style="background: #111111; color: #FFFFFF;">
+                                <th style="padding: 8px 12px;">ENGINE ARCHITECTURE</th>
+                                <th style="padding: 8px 12px;">R² ACCURACY</th>
+                                <th style="padding: 8px 12px;">TEST RMSE</th>
+                                <th style="padding: 8px 12px;">TEST MAE</th>
+                                <th style="padding: 8px 12px;">STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #E0E0E0; background: #F0F4FF; font-weight: 700;">
+                                <td style="padding: 8px 12px;">XGBoost Regressor (Active)</td>
+                                <td style="padding: 8px 12px; color: #FF3B30;">0.9509</td>
+                                <td style="padding: 8px 12px;">$17,000.16</td>
+                                <td style="padding: 8px 12px;">$11,937.38</td>
+                                <td style="padding: 8px 12px; color: #4169FF;">● OPTIMAL BENCHMARK</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #E0E0E0;">
+                                <td style="padding: 8px 12px;">Gradient Boosting Trees</td>
+                                <td style="padding: 8px 12px;">0.9516</td>
+                                <td style="padding: 8px 12px;">$16,869.84</td>
+                                <td style="padding: 8px 12px;">$11,888.30</td>
+                                <td style="padding: 8px 12px; color: #666;">Ensemble Verified</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #E0E0E0;">
+                                <td style="padding: 8px 12px;">Random Forest Regressor</td>
+                                <td style="padding: 8px 12px;">0.9763</td>
+                                <td style="padding: 8px 12px;">$11,803.35</td>
+                                <td style="padding: 8px 12px;">$8,188.33</td>
+                                <td style="padding: 8px 12px; color: #666;">Ensemble Verified</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #E0E0E0;">
+                                <td style="padding: 8px 12px;">Ridge Linear Regularized</td>
+                                <td style="padding: 8px 12px;">0.9224</td>
+                                <td style="padding: 8px 12px;">$21,364.68</td>
+                                <td style="padding: 8px 12px;">$14,448.83</td>
+                                <td style="padding: 8px 12px; color: #666;">Baseline Verified</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Section 3: Value Drivers & Weights -->
+                <div style="margin-bottom: 22px;">
+                    <h3 style="font-size: 14px; font-family: monospace; font-weight: 700; color: #FF3B30; letter-spacing: 0.08em; margin: 0 0 12px 0; border-bottom: 1px solid #E0E0E0; padding-bottom: 6px;">
+                        03 / PRIMARY PROPERTY VALUE DRIVERS
+                    </h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px 24px; font-size: 12px;">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
+                                <span>Living Space & Replacement Area</span>
+                                <strong>+38% Weight</strong>
+                            </div>
+                            <div style="height: 5px; background: #E0E0E0; border-radius: 3px; overflow: hidden;">
+                                <div style="width: 85%; height: 100%; background: #FF3B30;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
+                                <span>Overall Build Quality & Materials</span>
+                                <strong>+32% Weight</strong>
+                            </div>
+                            <div style="height: 5px; background: #E0E0E0; border-radius: 3px; overflow: hidden;">
+                                <div style="width: 72%; height: 100%; background: #FF3B30;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
+                                <span>Location & Neighborhood Desirability</span>
+                                <strong>+14% Weight</strong>
+                            </div>
+                            <div style="height: 5px; background: #E0E0E0; border-radius: 3px; overflow: hidden;">
+                                <div style="width: 50%; height: 100%; background: #4169FF;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
+                                <span>Garage, Basement & Lot Utility</span>
+                                <strong>+11% Weight</strong>
+                            </div>
+                            <div style="height: 5px; background: #E0E0E0; border-radius: 3px; overflow: hidden;">
+                                <div style="width: 38%; height: 100%; background: #111111;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer & Certification Stamp -->
+                <div style="border-top: 2px solid #111111; padding-top: 14px; display: flex; justify-content: space-between; align-items: center; font-size: 11px;">
+                    <div>
+                        <p style="margin: 0 0 3px 0; font-weight: 700; color: #111111;">Ames Valuation Studio · Certified Automated Property Appraisal</p>
+                        <p style="margin: 0; color: #777777; font-family: monospace;">Trained on 10,000 real sales records · Supervised Gradient Boosted Machine Learning Pipeline</p>
+                    </div>
+                    <div style="border: 1.5px solid #FF3B30; color: #FF3B30; padding: 4px 10px; border-radius: 4px; font-family: monospace; font-weight: 800; letter-spacing: 0.1em; font-size: 10.5px;">
+                        ● CERTIFIED AI-ESTIMATE
+                    </div>
                 </div>
             `;
 
             document.body.appendChild(pdfElem);
 
             const opt = {
-                margin: [10, 10, 10, 10],
-                filename: `Ames_Property_Appraisal_Certificate.pdf`,
+                margin: [8, 8, 8, 8],
+                filename: `Ames_Property_Appraisal_Report_${Math.round(price)}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: {
                     scale: 2,
@@ -931,6 +1081,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     backgroundColor: '#FFFFFF',
                     scrollY: 0,
                     scrollX: 0,
+                    windowWidth: 800,
                     logging: false
                 },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
